@@ -1,10 +1,11 @@
-package com.springboot.repos;
+package com.springboot.service;
 
 import com.springboot.model.Product;
 
-public interface ProductRepo {
-	
+public interface ProductRestService {
+
 	public void setProduct(String id, Product product);
 	public Product getProductById(String id);
+
 
 }
