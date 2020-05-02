@@ -1,10 +1,10 @@
-package com.springboot.repos;
+package com.microservice.productservice.repos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.springboot.model.Product;
+import com.microservice.productservice.model.Product;
 
 @Repository
 public class ProductRepoImpl implements ProductRepo{

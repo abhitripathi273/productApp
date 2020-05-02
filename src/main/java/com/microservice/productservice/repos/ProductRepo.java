@@ -1,6 +1,6 @@
-package com.springboot.repos;
+package com.microservice.productservice.repos;
 
-import com.springboot.model.Product;
+import com.microservice.productservice.model.Product;
 
 public interface ProductRepo {
 	

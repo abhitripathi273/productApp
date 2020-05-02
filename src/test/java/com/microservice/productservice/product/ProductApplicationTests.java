@@ -1,4 +1,4 @@
-package com.springboot.product;
+package com.microservice.productservice.product;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
