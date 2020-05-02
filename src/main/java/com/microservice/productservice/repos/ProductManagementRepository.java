@@ -1,11 +1,11 @@
 package com.microservice.productservice.repos;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.microservice.productservice.model.Product;
 
 
-public interface ProductManagementRepository extends JpaRepository<Product, Long> {
+public interface ProductManagementRepository extends PagingAndSortingRepository<Product, Long> {
 
 
 }

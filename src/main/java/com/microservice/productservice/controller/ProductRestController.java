@@ -6,10 +6,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,6 +27,9 @@ public class ProductRestController {
 	
 	@Autowired
 	ProductRestService productService;
+	
+	@Value("${gridwall.products.page.size}")
+	private String pageSizeConfigValue;
 
 	@GetMapping("/shop/products/{id}")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "getProductByIdFallback", commandKey = "getProductById")
@@ -46,13 +51,14 @@ public class ProductRestController {
 
 	@GetMapping("/shop/products")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "getAllProductsFallback")
-	public List<Product> getAllProducts(Product product) {
-		log.debug("getAllProducts: Started!!!");
-		// productService.setProduct(String.valueOf(product.getId()), product);
-		return productService.getAllProducts(product);
+	public List<Product> getAllProducts(@RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "0") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy) {
+		log.debug("Fetch all products ");
+		return productService.getAllProducts(pageNo,(pageSize==0?Integer.valueOf(this.pageSizeConfigValue):pageSize),sortBy);
 
 	}
-
+	
 	@GetMapping("/shop/placeOrder/product/{id}")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "placeOrderByProductIdFallback")
 	public Product placeOrderByProductId(@PathVariable String id) throws ProductNotFoundException {
@@ -94,7 +100,9 @@ public class ProductRestController {
 	 *            the product
 	 * @return the all products fallback
 	 */
-	public List<Product> getAllProductsFallback(Product product) {
+	public List<Product> getAllProductsFallback(@RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "0") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy) {
 		log.error("Could not fetch all products: getAllProductsFallback : START");
 		return new ArrayList<>();
 	}

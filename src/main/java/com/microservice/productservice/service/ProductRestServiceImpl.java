@@ -1,32 +1,37 @@
 package com.microservice.productservice.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.microservice.productservice.exception.ProductNotFoundException;
 import com.microservice.productservice.feignClients.InventoryService;
 import com.microservice.productservice.model.Product;
 import com.microservice.productservice.repos.ProductManagementRepository;
-import com.microservice.productservice.repos.ProductRepo;
 
 @Service
 public class ProductRestServiceImpl implements ProductRestService {
 
 	@Autowired
-	// private ProductRepo repository;
-	// Using JPA repository for operation
 	private ProductManagementRepository repository;
 
 	@Autowired
 	private InventoryService inventory;
+	
+	private static final AtomicInteger count = new AtomicInteger(3000);
 
 	@Override
 	public void addProduct(Product product) {
+		product.setId(Long.valueOf(count.incrementAndGet()));
 		inventory.restockProduct(product.getProductCategory());
 		repository.save(product);
 	}
@@ -46,10 +51,16 @@ public class ProductRestServiceImpl implements ProductRestService {
 	}
 
 	@Override
-	public List<Product> getAllProducts(Product product) {
-		Iterable<Product> userList = repository.findAll();
-		return StreamSupport.stream(userList.spliterator(), false) 
-		            .collect(Collectors.toList()); 
+	public List<Product> getAllProducts(Integer pageNo, Integer pageSize, String sortBy) {
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		 
+        Page<Product> pagedResult = repository.findAll(paging);
+         
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<Product>();
+        }
 	}
 
 	@Override
@@ -69,6 +80,8 @@ public class ProductRestServiceImpl implements ProductRestService {
 		return orderedProduct;
 
 	}
+	
+	
 
 	/*
 	 * @Override public void setProduct(String id, Product product) {
