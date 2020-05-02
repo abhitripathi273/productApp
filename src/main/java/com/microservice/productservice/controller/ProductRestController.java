@@ -1,43 +1,39 @@
-package com.springboot.controller;
+package com.microservice.productservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservice.productservice.exception.ProductNotFoundException;
+import com.microservice.productservice.model.Product;
+import com.microservice.productservice.service.ProductRestService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.springboot.exception.ProductNotFoundException;
-import com.springboot.model.Product;
-import com.springboot.service.ProductRestService;
 
 @RestController
-@RequestMapping("/shop")
 public class ProductRestController {
-
-	/*
-	 * @Autowired private ProductRepo repo;
-	 */
 
 	@Autowired
 	ProductRestService productService;
+	
 
-	@RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
+	@GetMapping("/shop/products/{id}")
 	@HystrixCommand(groupKey="ProductMicroService", fallbackMethod="getProductByIdFallback", commandKey="getProductById")
-	public Product getProductById(@PathVariable("id") String id) throws ProductNotFoundException {
+	public Product getProductById(@PathVariable String id) throws ProductNotFoundException {
 		System.out.println("getProductById: Started!!!");
-		return productService.getProductById(id);
+		//return productService.getProductById(id);
+		return productService.fetchProductById(id);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/products")
+	@PostMapping("/shop/products")
 	@HystrixCommand(groupKey="ProductMicroService", fallbackMethod="addProductFallback")
 	public String addProduct(@RequestBody Product product) throws JsonProcessingException {
 		System.out.println("addProduct: Started!!!");
-		ObjectMapper mapper = new ObjectMapper();
-		productService.setProduct(String.valueOf(product.getId()), product);
+		//productService.setProduct(String.valueOf(product.getId()), product);
+		productService.addProduct(product);
 		return "SUCCESS";
 
 	}

@@ -1,4 +1,4 @@
-package com.springboot.model;
+package com.microservice.productservice.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
