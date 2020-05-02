@@ -20,45 +20,48 @@ public class ProductRestController {
 
 	@Autowired
 	ProductRestService productService;
-	
 
 	@GetMapping("/shop/products/{id}")
-	@HystrixCommand(groupKey="ProductMicroService", fallbackMethod="getProductByIdFallback", commandKey="getProductById")
+	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "getProductByIdFallback", commandKey = "getProductById")
 	public Product getProductById(@PathVariable String id) throws ProductNotFoundException {
 		System.out.println("getProductById: Started!!!");
-		//return productService.getProductById(id);
+		// return productService.getProductById(id);
 		return productService.fetchProductById(id);
 	}
 
 	@PostMapping("/shop/products")
-	@HystrixCommand(groupKey="ProductMicroService", fallbackMethod="addProductFallback")
+	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "addProductFallback")
 	public String addProduct(@RequestBody Product product) throws JsonProcessingException {
 		System.out.println("addProduct: Started!!!");
-		//productService.setProduct(String.valueOf(product.getId()), product);
+		// productService.setProduct(String.valueOf(product.getId()), product);
 		productService.addProduct(product);
 		return "SUCCESS";
 
 	}
-	
+
 	@GetMapping("/shop/products")
 	public List<Product> getAllProducts(Product product) {
 		System.out.println("getAllProducts: Started!!!");
-		//productService.setProduct(String.valueOf(product.getId()), product);
+		// productService.setProduct(String.valueOf(product.getId()), product);
 		return productService.getAllProducts(product);
 
 	}
-	
+
+	@GetMapping("/shop/placeOrder/product/{id}")
+	public Product placeOrderByProductId(@PathVariable String id) throws ProductNotFoundException {
+		return productService.placeOrderByProductId(id);
+	}
+
 	/**
 	 * Gets the product by id fallback.
 	 *
-	 * @param id
-	 *            the id
+	 * @param id the id
 	 * @return the product by id fallback
 	 */
 	public Product getProductByIdFallback(@PathVariable("id") String id, Throwable throwable) {
-		if(throwable instanceof ProductNotFoundException){
+		if (throwable instanceof ProductNotFoundException) {
 			System.out.println("Product: " + id + " not found");
-		}else if(throwable instanceof Exception){
+		} else if (throwable instanceof Exception) {
 			System.out.println("System is down!");
 		}
 		return new Product();
@@ -67,8 +70,7 @@ public class ProductRestController {
 	/**
 	 * Adds the product fallback.
 	 *
-	 * @param product
-	 *            the product
+	 * @param product the product
 	 * @return the string
 	 */
 	public String addProductFallback(@RequestBody Product product) {

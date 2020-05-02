@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.microservice.productservice.exception.ProductNotFoundException;
+import com.microservice.productservice.feignClients.InventoryService;
 import com.microservice.productservice.model.Product;
 import com.microservice.productservice.repos.ProductManagementRepository;
 import com.microservice.productservice.repos.ProductRepo;
@@ -19,8 +20,12 @@ public class ProductRestServiceImpl implements ProductRestService {
 	// Using JPA repository for operation
 	private ProductManagementRepository repository;
 
+	@Autowired
+	private InventoryService inventory;
+
 	@Override
 	public void addProduct(Product product) {
+		inventory.restockProduct(product.getProductCategory());
 		repository.save(product);
 	}
 
@@ -43,7 +48,24 @@ public class ProductRestServiceImpl implements ProductRestService {
 		return repository.findAll();
 	}
 
-	
+	@Override
+	public Product placeOrderByProductId(String id) {
+		Product orderedProduct = new Product();
+		repository.findById(Long.parseLong(id)).ifPresent(product -> {
+			orderedProduct.setId(product.getId());
+			orderedProduct.setName(product.getName());
+			orderedProduct.setLongDescription(product.getLongDescription());
+			orderedProduct.setShortDescription(product.getShortDescription());
+			orderedProduct.setProductCategory(product.getProductCategory());
+			orderedProduct.setPrice(product.getPrice());
+			inventory.purchaseProduct(product.getProductCategory());
+			repository.delete(product);
+		});
+		System.out.println("Order placed!!!");
+		return orderedProduct;
+
+	}
+
 	/*
 	 * @Override public void setProduct(String id, Product product) {
 	 * repository.setProduct(id, product);

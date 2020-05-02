@@ -14,7 +14,7 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String product_category;
+	private String productCategory;
 	private String name;
 	private String shortDescription;
 	private String longDescription;
@@ -44,12 +44,12 @@ public class Product implements Serializable {
 		this.price = price;
 	}
 
-	public String getProduct_category() {
-		return product_category;
+	public String getProductCategory() {
+		return productCategory;
 	}
 
-	public void setProduct_category(String product_category) {
-		this.product_category = product_category;
+	public void setProductCategory(String productCategory) {
+		this.productCategory = productCategory;
 	}
 
 	public String getShortDescription() {
@@ -76,7 +76,7 @@ public class Product implements Serializable {
 		result = prime * result + ((longDescription == null) ? 0 : longDescription.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
-		result = prime * result + ((product_category == null) ? 0 : product_category.hashCode());
+		result = prime * result + ((productCategory == null) ? 0 : productCategory.hashCode());
 		result = prime * result + ((shortDescription == null) ? 0 : shortDescription.hashCode());
 		return result;
 	}
@@ -110,10 +110,10 @@ public class Product implements Serializable {
 				return false;
 		} else if (!price.equals(other.price))
 			return false;
-		if (product_category == null) {
-			if (other.product_category != null)
+		if (productCategory == null) {
+			if (other.productCategory != null)
 				return false;
-		} else if (!product_category.equals(other.product_category))
+		} else if (!productCategory.equals(other.productCategory))
 			return false;
 		if (shortDescription == null) {
 			if (other.shortDescription != null)

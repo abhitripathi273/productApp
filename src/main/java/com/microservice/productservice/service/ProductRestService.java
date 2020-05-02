@@ -12,5 +12,6 @@ public interface ProductRestService {
 	 Product fetchProductById(String id) throws ProductNotFoundException;
 	 void addProduct(Product product);
 	 List<Product> getAllProducts(Product product);
+	 Product placeOrderByProductId(String id);
 
 }

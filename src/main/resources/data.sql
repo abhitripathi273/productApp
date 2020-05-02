@@ -10,15 +10,15 @@ CREATE TABLE product
  
 );
 insert into product(id, product_category,name,short_Description,long_Description,price)
-values (101, 'Phones & Devices','Apple iphone SE','iPhone SE is the most powerful 4.7-inch iPhone ever.1 Featuring A13 Bionic, the fastest chip in a smartphone, for incredible performance in apps, games, and photography.',
+values (101, 'Phones','Apple iphone SE','iPhone SE is the most powerful 4.7-inch iPhone ever.1 Featuring A13 Bionic, the fastest chip in a smartphone, for incredible performance in apps, games, and photography.',
 'iPhone SE is the most powerful 4.7-inch iPhone ever.1 Featuring A13 Bionic, the fastest chip in a smartphone, for incredible performance in apps, games, and photography. Portrait mode for studio-quality portraits and six lighting effects. Next-generation Smart HDR for incredible detail across highlights and shadows. Cinematic-quality 4K video. And all the advanced features of iOS. With long battery life2 and water resistance,3 its so much of the iPhone you love, in a not so big size. So much to love, so little to hold with the iPhone SE and Verizon, Americas most awarded network.',
 400);
 insert into product(id, product_category,name,short_Description,long_Description,price)
-values (102, 'Phones & Devices','Samsung Galaxy S20 Ultra 5G','Meet the Samsung Galaxy S20 Ultra 5G. Equipped with a first-of-its-kind 108 MP camera, this revolutionary smartphone gives you more power, speed and options for doing the things you love.',
+values (102, 'Phones','Samsung Galaxy S20 Ultra 5G','Meet the Samsung Galaxy S20 Ultra 5G. Equipped with a first-of-its-kind 108 MP camera, this revolutionary smartphone gives you more power, speed and options for doing the things you love.',
 'Meet the Samsung Galaxy S20 Ultra 5G. Equipped with a first-of-its-kind 108 MP camera, this revolutionary smartphone gives you more power, speed and options for doing the things you love. Capture every moment with unparalleled camera features like Ultra Bright Night, 100x Space Zoom and Single Take AI.',
 1399);
 insert into product(id, product_category,name,short_Description,long_Description,price)
-values (103, 'Phones & Devices','Motorola razr','Experience the iconic flip phone, totally re-invented.',
+values (103, 'Phones','Motorola razr','Experience the iconic flip phone, totally re-invented.',
 'Experience the iconic flip phone, totally re-invented. The Motorola razr fuses the familiar, pocket-ready flip design with the style and intelligence of the modern smartphone. Shattering the status quo, the ultra-compact, water repellent1 razr opens to a full-sized touchscreen. ',
 1499);
 insert into product(id, product_category,name,short_Description,long_Description,price)
