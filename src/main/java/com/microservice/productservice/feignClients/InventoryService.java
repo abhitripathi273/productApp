@@ -11,9 +11,9 @@ import com.microservice.productservice.model.Inventory;
 public interface InventoryService {
 
 	@GetMapping(path = "/inventory/restock/{productType}")
-	public ResponseEntity<Inventory> restockProduct(@PathVariable String productType);
+	public ResponseEntity<Inventory> restockProduct(@PathVariable("productType") String productType);
 
 	@GetMapping(path = "/inventory/purchase/{productType}")
-	public ResponseEntity<Inventory> purchaseProduct(@PathVariable String productType);
+	public ResponseEntity<Inventory> purchaseProduct(@PathVariable("productType") String productType);
 
 }
