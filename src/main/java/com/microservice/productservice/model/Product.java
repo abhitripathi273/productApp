@@ -8,9 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.data.redis.core.RedisHash;
+
 @Entity
+@RedisHash("product")
 public class Product implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5664856900321944134L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

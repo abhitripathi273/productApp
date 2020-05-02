@@ -7,4 +7,5 @@ import com.microservice.productservice.model.Product;
 
 public interface ProductManagementRepository extends JpaRepository<Product, Long> {
 
+
 }

@@ -2,6 +2,8 @@ package com.microservice.productservice.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +47,9 @@ public class ProductRestServiceImpl implements ProductRestService {
 
 	@Override
 	public List<Product> getAllProducts(Product product) {
-		return repository.findAll();
+		Iterable<Product> userList = repository.findAll();
+		return StreamSupport.stream(userList.spliterator(), false) 
+		            .collect(Collectors.toList()); 
 	}
 
 	@Override

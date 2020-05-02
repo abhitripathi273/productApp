@@ -8,11 +8,14 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.springframework.data.redis.core.RedisHash;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@RedisHash("inventory")
 public class Inventory {
 
     @Id
