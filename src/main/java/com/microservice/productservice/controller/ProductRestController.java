@@ -1,5 +1,7 @@
 package com.microservice.productservice.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +37,14 @@ public class ProductRestController {
 		//productService.setProduct(String.valueOf(product.getId()), product);
 		productService.addProduct(product);
 		return "SUCCESS";
+
+	}
+	
+	@GetMapping("/shop/products")
+	public List<Product> getAllProducts(Product product) {
+		System.out.println("getAllProducts: Started!!!");
+		//productService.setProduct(String.valueOf(product.getId()), product);
+		return productService.getAllProducts(product);
 
 	}
 	

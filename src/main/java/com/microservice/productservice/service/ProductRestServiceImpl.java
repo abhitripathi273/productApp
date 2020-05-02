@@ -1,5 +1,6 @@
 package com.microservice.productservice.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ public class ProductRestServiceImpl implements ProductRestService {
 
 	}
 
+	@Override
+	public List<Product> getAllProducts(Product product) {
+		return repository.findAll();
+	}
+
+	
 	/*
 	 * @Override public void setProduct(String id, Product product) {
 	 * repository.setProduct(id, product);

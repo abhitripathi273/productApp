@@ -14,10 +14,11 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String product_category;
 	private String name;
-	private String description;
+	private String shortDescription;
+	private String longDescription;
 	private BigDecimal price;
-	private Integer quantity;
 
 	public Long getId() {
 		return id;
@@ -35,14 +36,6 @@ public class Product implements Serializable {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -51,23 +44,40 @@ public class Product implements Serializable {
 		this.price = price;
 	}
 
-	public Integer getQuantity() {
-		return quantity;
+	public String getProduct_category() {
+		return product_category;
 	}
 
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
+	public void setProduct_category(String product_category) {
+		this.product_category = product_category;
 	}
-	
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
+
+	public String getLongDescription() {
+		return longDescription;
+	}
+
+	public void setLongDescription(String longDescription) {
+		this.longDescription = longDescription;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((longDescription == null) ? 0 : longDescription.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
-		result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
+		result = prime * result + ((product_category == null) ? 0 : product_category.hashCode());
+		result = prime * result + ((shortDescription == null) ? 0 : shortDescription.hashCode());
 		return result;
 	}
 
@@ -80,15 +90,15 @@ public class Product implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Product other = (Product) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (longDescription == null) {
+			if (other.longDescription != null)
+				return false;
+		} else if (!longDescription.equals(other.longDescription))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -100,10 +110,15 @@ public class Product implements Serializable {
 				return false;
 		} else if (!price.equals(other.price))
 			return false;
-		if (quantity == null) {
-			if (other.quantity != null)
+		if (product_category == null) {
+			if (other.product_category != null)
 				return false;
-		} else if (!quantity.equals(other.quantity))
+		} else if (!product_category.equals(other.product_category))
+			return false;
+		if (shortDescription == null) {
+			if (other.shortDescription != null)
+				return false;
+		} else if (!shortDescription.equals(other.shortDescription))
 			return false;
 		return true;
 	}
