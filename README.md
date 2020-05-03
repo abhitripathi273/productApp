@@ -65,6 +65,9 @@ curl -X GET \
 
 Response
 
+{
+ "totalProduct": 5,
+ "totalPages": 1,
 [
     {
         "id": 102,
@@ -83,6 +86,7 @@ Response
         "price": 1499
     }
     ]
+    }
     
     
 Request
