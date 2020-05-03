@@ -1,10 +1,8 @@
 package com.microservice.productservice.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.microservice.productservice.exception.ProductNotFoundException;
 import com.microservice.productservice.feignClients.InventoryService;
+import com.microservice.productservice.model.Gridwall;
 import com.microservice.productservice.model.Product;
 import com.microservice.productservice.repos.ProductManagementRepository;
 
@@ -34,12 +33,12 @@ public class ProductRestServiceImpl implements ProductRestService {
 	private static final AtomicInteger count = new AtomicInteger(3000);
 
 	@Override
-	public void addProduct(Product product) {
+	public Product addProduct(Product product) {
 		LOGGER.debug("Inside service method:: addProduct");
 		product.setId(Long.valueOf(count.incrementAndGet()));
 		inventory.restockProduct(product.getProductCategory());
 		LOGGER.debug("Inventory updated and product added.");
-		repository.save(product);
+		return repository.save(product);
 	}
 
 	@Override
@@ -57,19 +56,23 @@ public class ProductRestServiceImpl implements ProductRestService {
 	}
 
 	@Override
-	public List<Product> getAllProducts(Integer pageNo, Integer pageSize, String sortBy) {
+	public Gridwall getAllProducts(Integer pageNo, Integer pageSize, String sortBy) {
 		LOGGER.debug("Inside service method:: getAllProducts");
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-		 
-        Page<Product> pagedResult = repository.findAll(paging);
-        LOGGER.info("Fetching product list");
-        if(pagedResult.hasContent()) {
-        	 LOGGER.debug("Products found");
-            return pagedResult.getContent();
-        } else {
-        	 LOGGER.debug("No products in the list returning empty list.");
-            return new ArrayList<Product>();
-        }
+
+		Page<Product> pagedResult = repository.findAll(paging);
+		Gridwall gridwall = new Gridwall();
+		gridwall.setTotalProducts((int) (repository.count()));
+		gridwall.setTotalPages(pagedResult.getTotalPages());
+		LOGGER.info("Fetching product list");
+		if (pagedResult.hasContent()) {
+			LOGGER.debug("Products found");
+			gridwall.setProductList(pagedResult.stream().map(i -> i).collect(Collectors.toList()));
+			return gridwall;
+		} else {
+			LOGGER.debug("No products in the list returning empty list.");
+			return new Gridwall();
+		}
 	}
 
 	@Override
@@ -93,17 +96,5 @@ public class ProductRestServiceImpl implements ProductRestService {
 		return orderedProduct;
 
 	}
-	
-	
-
-	/*
-	 * @Override public void setProduct(String id, Product product) {
-	 * repository.setProduct(id, product);
-	 * 
-	 * }
-	 * 
-	 * @Override public Product getProductById(String id) { return
-	 * repository.getProductById(id); }
-	 */
 
 }
