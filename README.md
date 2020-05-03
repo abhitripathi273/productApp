@@ -14,21 +14,23 @@ curl -X GET \
 Response
 
 {
-    "id": 1,
-    "name": "laptops",
-    "description": "laptops",
-    "price": 2000,
-    "quantity": 500
+	"id": 101,
+	"productCategory": "Smartwatches",
+	"name": "Verizon GizmoWatch 2",
+	"shortDescription": "GizmoWatch 2 is a kid-friendly smartwatch designed with your childs safety in mind.",
+	"longDescription": "GizmoWatch 2 is a kid-friendly smartwatch designed with your childs safety in mind.",
+	"price": 99
 }
 
 Failure
 
 {
-    "id": null,
-    "name": null,
-    "description": null,
-    "price": null,
-    "quantity": null
+    	"id": null
+	"productCategory": null,
+	"name": null,
+	"shortDescription": null,
+	"longDescription": null,
+	"price": null
 }
 
 Request
@@ -39,10 +41,11 @@ curl -X POST \
   -H 'content-type: application/json' \
   -H 'postman-token: 2a9c2716-5b09-67e5-2cf4-38907c9649a2' \
   -d '{
-	"name":"laptops",
-	"description":"laptops",
-	"price":"2000",
-	"quantity":"500"
+	"productCategory": "Smartwatches",
+	"name": "Verizon GizmoWatch 2",
+	"shortDescription": "GizmoWatch 2 is a kid-friendly smartwatch designed with your childs safety in mind.",
+	"longDescription": "GizmoWatch 2 is a kid-friendly smartwatch designed with your childs safety in mind.",
+	"price": 99
 }'
 
 Response
