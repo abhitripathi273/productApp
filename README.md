@@ -1,7 +1,9 @@
 # productApp
 Endpoints
 GET /shop/products/{productId}
-POSt /shop/products
+POST /shop/products
+GET /shop/products
+GET /shop/placeOrder/product/{productId}
 
 Sample Request and Response Details
 Request
