@@ -16,7 +16,6 @@ public class Gridwall {
 	
 	private List<Product> productList = new ArrayList<>();
 	private Integer totalProducts;
-	private Integer totalProductsInInventory;
 	private Integer totalPages;
 
 }
