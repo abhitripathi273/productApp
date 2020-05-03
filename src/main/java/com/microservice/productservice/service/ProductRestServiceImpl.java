@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,8 @@ import com.microservice.productservice.repos.ProductManagementRepository;
 
 @Service
 public class ProductRestServiceImpl implements ProductRestService {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(ProductRestServiceImpl.class);
 
 	@Autowired
 	private ProductManagementRepository repository;
@@ -31,18 +35,20 @@ public class ProductRestServiceImpl implements ProductRestService {
 
 	@Override
 	public void addProduct(Product product) {
+		LOGGER.debug("Inside service method:: addProduct");
 		product.setId(Long.valueOf(count.incrementAndGet()));
 		inventory.restockProduct(product.getProductCategory());
+		LOGGER.debug("Inventory updated and product added.");
 		repository.save(product);
 	}
 
 	@Override
 	public Product fetchProductById(String id) throws ProductNotFoundException {
-		System.out.println("Inside service method:: fetchProductById" + id);
+		LOGGER.debug("Inside service method:: fetchProductById" + id);
 		Optional<Product> record = repository.findById(Long.parseLong(id));
-		System.out.println("Fetching product details by id");
+		LOGGER.debug("Fetching product details by id");
 		if (record.isPresent()) {
-			System.out.println("Product found!!");
+			LOGGER.debug("Product found!!");
 			return record.get();
 		} else {
 			throw new ProductNotFoundException("No record found with given product Id");
@@ -52,21 +58,26 @@ public class ProductRestServiceImpl implements ProductRestService {
 
 	@Override
 	public List<Product> getAllProducts(Integer pageNo, Integer pageSize, String sortBy) {
+		LOGGER.debug("Inside service method:: getAllProducts");
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 		 
         Page<Product> pagedResult = repository.findAll(paging);
-         
+        LOGGER.info("Fetching product list");
         if(pagedResult.hasContent()) {
+        	 LOGGER.debug("Products found");
             return pagedResult.getContent();
         } else {
+        	 LOGGER.debug("No products in the list returning empty list.");
             return new ArrayList<Product>();
         }
 	}
 
 	@Override
 	public Product placeOrderByProductId(String id) {
+		LOGGER.debug("Inside placeOrderByProductId :: started!!!");
 		Product orderedProduct = new Product();
 		repository.findById(Long.parseLong(id)).ifPresent(product -> {
+			LOGGER.debug("Product found in the list!!!");
 			orderedProduct.setId(product.getId());
 			orderedProduct.setName(product.getName());
 			orderedProduct.setLongDescription(product.getLongDescription());
@@ -74,9 +85,11 @@ public class ProductRestServiceImpl implements ProductRestService {
 			orderedProduct.setProductCategory(product.getProductCategory());
 			orderedProduct.setPrice(product.getPrice());
 			inventory.purchaseProduct(product.getProductCategory());
+			LOGGER.debug("Inventory updated!!!");
 			repository.delete(product);
+			LOGGER.debug("Product list updated!!!");
 		});
-		System.out.println("Order placed!!!");
+		LOGGER.debug("Inside placeOrderByProductId :: end!!!");
 		return orderedProduct;
 
 	}

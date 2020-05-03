@@ -23,7 +23,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 @RestController
 public class ProductRestController {
 	
-	private static Logger log = LoggerFactory.getLogger(ProductRestController.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(ProductRestController.class);
 	
 	@Autowired
 	ProductRestService productService;
@@ -34,7 +34,7 @@ public class ProductRestController {
 	@GetMapping("/shop/products/{id}")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "getProductByIdFallback", commandKey = "getProductById")
 	public Product getProductById(@PathVariable String id) throws ProductNotFoundException {
-		log.debug("getProductById: Started!!!");
+		LOGGER.debug("getProductById: Started!!!");
 		// return productService.getProductById(id);
 		return productService.fetchProductById(id);
 	}
@@ -42,7 +42,7 @@ public class ProductRestController {
 	@PostMapping("/shop/products")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "addProductFallback")
 	public String addProduct(@RequestBody Product product) throws JsonProcessingException {
-		log.debug("addProduct: Started!!!");
+		LOGGER.debug("addProduct: Started!!!");
 		// productService.setProduct(String.valueOf(product.getId()), product);
 		productService.addProduct(product);
 		return "SUCCESS";
@@ -54,7 +54,7 @@ public class ProductRestController {
 	public List<Product> getAllProducts(@RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "0") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy) {
-		log.debug("Fetch all products ");
+		LOGGER.debug("Fetch all products ");
 		return productService.getAllProducts(pageNo,(pageSize==0?Integer.valueOf(this.pageSizeConfigValue):pageSize),sortBy);
 
 	}
@@ -62,6 +62,7 @@ public class ProductRestController {
 	@GetMapping("/shop/placeOrder/product/{id}")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "placeOrderByProductIdFallback")
 	public Product placeOrderByProductId(@PathVariable String id) throws ProductNotFoundException {
+		LOGGER.debug("placeOrderByProductId: Started!!!");
 		return productService.placeOrderByProductId(id);
 	}
 
@@ -73,9 +74,9 @@ public class ProductRestController {
 	 */
 	public Product getProductByIdFallback(@PathVariable("id") String id, Throwable throwable) {
 		if (throwable instanceof ProductNotFoundException) {
-			log.error("Product: " + id + " not found");
+			LOGGER.error("Product: " + id + " not found");
 		} else if (throwable instanceof Exception) {
-			log.error("System is down!");
+			LOGGER.error("System is down!");
 		}
 		return new Product();
 	}
@@ -88,7 +89,7 @@ public class ProductRestController {
 	 * @return the string
 	 */
 	public String addProductFallback(@RequestBody Product product) {
-		log.error("Adding product: " + String.valueOf(product.getId()) + " failed");
+		LOGGER.error("Adding product: " + String.valueOf(product.getId()) + " failed");
 		return "FAILED";
 
 	}
@@ -103,15 +104,15 @@ public class ProductRestController {
 	public List<Product> getAllProductsFallback(@RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "0") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy) {
-		log.error("Could not fetch all products: getAllProductsFallback : START");
+		LOGGER.error("Could not fetch all products: getAllProductsFallback : START");
 		return new ArrayList<>();
 	}
 
 	public Product placeOrderByProductIdFallback(@PathVariable String id, Throwable throwable) {
 		if (throwable instanceof ProductNotFoundException) {
-			log.error("Could not place order for product:"+id+" placeOrderByProductIdFallback : START");
+			LOGGER.error("Could not place order for product:"+id+" placeOrderByProductIdFallback : START");
 		} else if (throwable instanceof Exception) {
-			log.error("System is down!");
+			LOGGER.error("System is down!");
 		}
 		return new Product();
 	}
