@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,10 @@ public class ProductRestController {
 	@Value("${gridwall.products.page.size}")
 	private String pageSizeConfigValue;
 
+	public static final String PRODUCT_LIST_CACHE_KEY = "productListCacheKey";
+	
 	@GetMapping("/shop/products/{id}")
+	@Cacheable(value = "product", key = "#id")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "getProductByIdFallback", commandKey = "getProductById")
 	public Product getProductById(@PathVariable String id) throws ProductNotFoundException {
 		LOGGER.debug("getProductById: Started!!!");
@@ -50,6 +54,7 @@ public class ProductRestController {
 	}
 
 	@GetMapping("/shop/products")
+	//@Cacheable(value = "products", key = "#root.target.PRODUCT_LIST_CACHE_KEY")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "getAllProductsFallback")
 	public List<Product> getAllProducts(@RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "0") Integer pageSize,
