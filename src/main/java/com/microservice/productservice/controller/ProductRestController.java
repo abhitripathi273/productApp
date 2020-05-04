@@ -1,10 +1,12 @@
 package com.microservice.productservice.controller;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,12 +56,12 @@ public class ProductRestController {
 	@GetMapping("/shop/products")
 	//@Cacheable(value = "products", key = "#root.target.PRODUCT_LIST_CACHE_KEY")
 	@HystrixCommand(groupKey = "ProductMicroService", fallbackMethod = "getAllProductsFallback")
-	public Gridwall getAllProducts(@RequestParam(defaultValue = "0") Integer pageNo,
-            @RequestParam(defaultValue = "0") Integer pageSize,
-            @RequestParam(defaultValue = "id") String sortBy) {
+	public ResponseEntity<Gridwall> getAllProducts(@RequestParam(defaultValue = "0") Integer pageNo,
+			@RequestParam(defaultValue = "0") Integer pageSize, @RequestParam(defaultValue = "id") String sortBy) {
 		LOGGER.debug("Fetch all products ");
-		return productService.getAllProducts(pageNo,(pageSize==0?Integer.valueOf(this.pageSizeConfigValue):pageSize),sortBy);
-
+		Gridwall gridwall = productService.getAllProducts(pageNo,
+				(pageSize == 0 ? Integer.valueOf(this.pageSizeConfigValue) : pageSize), sortBy);
+		return new ResponseEntity<Gridwall>(gridwall, new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/shop/placeOrder/product/{id}")
@@ -104,11 +106,11 @@ public class ProductRestController {
 	 *            the product
 	 * @return the all products fallback
 	 */
-	public Gridwall getAllProductsFallback(@RequestParam(defaultValue = "0") Integer pageNo,
+	public ResponseEntity<Gridwall> getAllProductsFallback(@RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "0") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy) {
 		LOGGER.error("Could not fetch all products: getAllProductsFallback : START");
-		return new Gridwall();
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	public Product placeOrderByProductIdFallback(@PathVariable String id, Throwable throwable) {
