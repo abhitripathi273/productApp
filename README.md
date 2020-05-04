@@ -1,3 +1,5 @@
+Port : 8086
+
 # productApp
 Endpoints
 GET /shop/products/{productId}
@@ -9,7 +11,7 @@ Sample Request and Response Details
 Request
 
 curl -X GET \
-  http://localhost:8086/shop/products/1 \
+  http://localhost:8086/shop/products/101 \
   -H 'cache-control: no-cache' \
   -H 'postman-token: 53384288-1f0c-346e-97b4-e9a37201631f'
 
@@ -52,13 +54,13 @@ curl -X POST \
 
 Response
 
-SUCCESS
+200
 
 Failure
 
 FAILED
 
-Request
+400 Bad Request
 
 curl -X GET \
   http://localhost:8086/shop/products \
@@ -66,7 +68,7 @@ curl -X GET \
 Response
 
 {
- "totalProduct": 5,
+ "totalProducts": 2,
  "totalPages": 1,
 [
     {
@@ -104,4 +106,15 @@ curl -X GET \
         "longDescription": "Meet the Samsung Galaxy S20 Ultra 5G. Equipped with a first-of-its-kind 108 MP camera, this revolutionary smartphone gives you more power, speed and options for doing the things you love. Capture every moment with unparalleled camera features like Ultra Bright Night, 100x Space Zoom and Single Take AI.",
         "price": 1399
     }
+    
+ Failure
+
+{
+    	"id": null
+	"productCategory": null,
+	"name": null,
+	"shortDescription": null,
+	"longDescription": null,
+	"price": null
+}
 
