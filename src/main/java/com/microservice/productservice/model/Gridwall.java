@@ -14,8 +14,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Gridwall {
 	
-	private List<Product> productList = new ArrayList<>();
 	private long totalProducts;
 	private Integer totalPages;
+	private long productsPerPage;
+	private List<Product> productList = new ArrayList<>();
 
 }

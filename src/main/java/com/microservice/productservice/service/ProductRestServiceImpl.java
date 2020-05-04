@@ -64,6 +64,7 @@ public class ProductRestServiceImpl implements ProductRestService {
 		Gridwall gridwall = new Gridwall();
 		gridwall.setTotalProducts((int) (repository.count()));
 		gridwall.setTotalPages(pagedResult.getTotalPages());
+		gridwall.setProductsPerPage(pageSize);
 		LOGGER.info("Fetching product list");
 		if (pagedResult.hasContent()) {
 			LOGGER.debug("Products found");
